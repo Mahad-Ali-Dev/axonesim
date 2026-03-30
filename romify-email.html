@@ -1,0 +1,290 @@
+<style>
+  .re-wrapper * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .re-wrapper {
+    background-color: #f0f4f8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    padding: 40px 16px;
+    color: #1a202c;
+  }
+
+  .re-inner {
+    max-width: 620px;
+    margin: 0 auto;
+  }
+
+  .re-email {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  }
+
+  .re-header {
+    background: linear-gradient(135deg, #0a0f1e 0%, #0d1a3a 100%);
+    padding: 36px 40px;
+    text-align: center;
+  }
+  .re-logo {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .re-logo-axon { color: #00d4ff; }
+  .re-logo-esim { color: #ffffff; }
+  .re-tagline {
+    color: #94a3b8;
+    font-size: 12px;
+    margin-top: 6px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .re-body {
+    padding: 40px 40px 32px;
+  }
+
+  .re-greeting {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 20px;
+  }
+
+  .re-para {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #374151;
+    margin-bottom: 18px;
+  }
+
+  .re-section {
+    background: #f8faff;
+    border-left: 3px solid #00d4ff;
+    border-radius: 0 8px 8px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+  .re-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0099bb;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 14px;
+  }
+  .re-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .re-section ul li {
+    font-size: 14.5px;
+    color: #1e293b;
+    padding: 5px 0;
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.6;
+  }
+  .re-section ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 7px;
+    height: 7px;
+    background: #00d4ff;
+    border-radius: 50%;
+  }
+
+  .re-highlight {
+    background: #fffbeb;
+    border: 1px solid #fcd34d;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: #92400e;
+    margin: 20px 0;
+  }
+  .re-highlight strong { color: #78350f; }
+
+  .re-divider {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 28px 0;
+  }
+
+  .re-sig-regards {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 16px;
+  }
+  .re-sig-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 2px;
+  }
+  .re-sig-title {
+    font-size: 13px;
+    color: #00d4ff;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .re-sig-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .re-sig-detail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: #475569;
+    text-decoration: none;
+  }
+  .re-sig-detail .icon {
+    width: 18px;
+    height: 18px;
+    background: #e0f7ff;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+  .re-sig-detail a {
+    color: #0099bb;
+    text-decoration: none;
+  }
+  .re-sig-detail a:hover { text-decoration: underline; }
+
+  .re-footer {
+    background: #f8faff;
+    border-top: 1px solid #e2e8f0;
+    padding: 16px 40px;
+    text-align: center;
+    font-size: 11.5px;
+    color: #94a3b8;
+  }
+  .re-footer a { color: #00d4ff; text-decoration: none; }
+
+  @media (max-width: 480px) {
+    .re-body { padding: 28px 22px 24px; }
+    .re-header { padding: 28px 22px; }
+    .re-footer { padding: 14px 22px; }
+  }
+</style>
+
+<div class="re-wrapper">
+  <div class="re-inner">
+    <div class="re-email">
+
+      <!-- Header -->
+      <div class="re-header">
+        <div class="re-logo">
+          <span class="re-logo-axon">Axon</span>
+          <span class="re-logo-esim"> eSIM</span>
+        </div>
+        <div class="re-tagline">Instant Global Connectivity</div>
+      </div>
+
+      <!-- Body -->
+      <div class="re-body">
+
+        <div class="re-greeting">Dear Romify Team,</div>
+
+        <div class="re-para">
+          I hope this message finds you well. My name is <strong>Mahad Ali</strong> and I am running
+          an eSIM reselling business in Pakistan called <strong>Axon eSIM</strong>
+          (<a href="https://axonesim.com" style="color:#0099bb;">axonesim.com</a>).
+        </div>
+
+        <div class="re-para">
+          I am currently purchasing eSIM packages through a distributor who sources from Romify,
+          but I would like to establish a <strong>direct reseller relationship</strong> with you
+          to better serve my growing customer base and streamline operations.
+        </div>
+
+        <!-- Interested In -->
+        <div class="re-section">
+          <div class="re-section-title">I am specifically interested in</div>
+          <ul>
+            <li>Direct reseller account with wholesale pricing</li>
+            <li>API access for automated eSIM delivery</li>
+            <li>Plus eSIM packages (the ones currently in your catalog)</li>
+          </ul>
+        </div>
+
+        <div class="re-para">
+          My current monthly volume is growing and I expect to process
+          <strong>200–500 eSIM orders per month</strong> within the next 3 months.
+        </div>
+
+        <!-- Please Share -->
+        <div class="re-section">
+          <div class="re-section-title">Could you please share</div>
+          <ul>
+            <li>Your reseller onboarding process</li>
+            <li>Wholesale pricing tiers</li>
+            <li>API documentation</li>
+            <li>Minimum order requirements</li>
+          </ul>
+        </div>
+
+        <div class="re-highlight">
+          📌 We are currently finalizing our platform at
+          <a href="https://axonesim.com" style="color:#92400e;font-weight:600;">axonesim.com</a>
+          and expect to launch within <strong>2 weeks</strong>.
+        </div>
+
+        <div class="re-para">
+          I look forward to building a long-term business relationship with Romify
+          and would appreciate a prompt response at your earliest convenience.
+        </div>
+
+        <hr class="re-divider">
+
+        <!-- Signature -->
+        <div>
+          <div class="re-sig-regards">Best regards,</div>
+          <div class="re-sig-name">Mahad Ali</div>
+          <div class="re-sig-title">Founder — Axon eSIM &nbsp;·&nbsp; CEO — Tase LLC</div>
+          <div class="re-sig-details">
+            <div class="re-sig-detail">
+              <span class="icon">🌐</span>
+              <a href="https://axonesim.com">axonesim.com</a>
+            </div>
+            <div class="re-sig-detail">
+              <span class="icon">🏢</span>
+              <a href="https://tasedev.com">tasedev.com</a>
+            </div>
+            <div class="re-sig-detail">
+              <span class="icon">📞</span>
+              <a href="tel:+923349542871">+92 334 9542871</a>
+            </div>
+            <div class="re-sig-detail">
+              <span class="icon">✉️</span>
+              <a href="mailto:mahad107600@gmail.com">mahad107600@gmail.com</a>
+            </div>
+            <div class="re-sig-detail">
+              <span class="icon">in</span>
+              <a href="https://pk.linkedin.com/in/mahad-ali-48598a317">linkedin.com/in/mahad-ali-48598a317</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="re-footer">
+        Axon eSIM &nbsp;·&nbsp; Pakistan &nbsp;·&nbsp;
+        <a href="https://axonesim.com">axonesim.com</a>
+      </div>
+
+    </div>
+  </div>
+</div>

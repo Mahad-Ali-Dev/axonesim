@@ -1,0 +1,77 @@
+﻿Γû▓ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+node.exe : 
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" "C:
+\Users\saras\AppData\Roami
+ng\ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified    : 
+(:String) [], Rem    
+oteException
+    + FullyQualifiedErr   
+ orId : NativeComman    
+dError
+ 
+> Build error occurred
+Error: Turbopack build 
+failed with 1 errors:
+./app/(website)/page.tsx:2
+2:27
+`ssr: false` is not 
+allowed with 
+`next/dynamic` in Server 
+Components. Please move 
+it into a Client 
+Component.
+  [90m20 |[0m 
+[36mimport[0m { 
+[33mWorldMap[0m } 
+[36mfrom[0m [32m'@/comp
+onents/ui/world-map-client
+'[0m
+  [90m21 |[0m
+[31m[1m>[0m [90m22 
+|[0m [36mconst[0m [33m
+ScrollEsimSection[0m = 
+dynamic(
+  [90m   |[0m           
+                
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m23 
+|[0m   () => [36mimport
+[0m([32m'@/components/ui/
+scroll-esim-section'[0m),
+  [90m   |[0m [31m[1m^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+^[0m
+[31m[1m>[0m [90m24 
+|[0m   { ssr: 
+[36mfalse[0m }
+  [90m   |[0m [31m[1m^
+^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m25 
+|[0m )
+  [90m   |[0m 
+[31m[1m^[0m
+  [90m26 |[0m
+  [90m27 |[0m [90m/* 
+ΓöÇΓöÇΓöÇ Globe config 
+ΓöÇΓöÇΓöÇ */[0m
+  [90m28 |[0m 
+[36mconst[0m 
+[33mGLOBE_CONFIG[0m = {
+
+Ecmascript file had an 
+error
+
+
+    at <unknown> (./app/(w
+ebsite)/page.tsx:22:27)
