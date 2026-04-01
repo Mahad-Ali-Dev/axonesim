@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Allow: /_next/static/
+Allow: /_next/image/
 
 Sitemap: https://www.axonesim.com/sitemap.xml
