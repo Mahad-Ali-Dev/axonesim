@@ -11,7 +11,7 @@ const SUPPORT_LINKS = [
 ]
 const LEGAL_LINKS = [
   { label: 'Privacy', href: '/privacy-policy' },
-  { label: 'Terms',   href: '/privacy-policy' },
+  { label: 'Terms',   href: '/terms' },
   { label: 'Refunds', href: '/refund-policy' },
 ]
 
@@ -121,10 +121,14 @@ export default function Footer() {
             <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-violet-500/[0.04] border border-violet-500/10">
               <Shield className="w-4 h-4 text-violet-500 flex-shrink-0" />
               <p className="text-xs text-slate-600 leading-relaxed">
-                Secured by{' '}
-                <span className="text-violet-400 font-semibold">Safepay</span>{' '}
-                &amp;{' '}
-                <span className="text-violet-400 font-semibold">Stripe</span>
+                Payments secured &amp; processed manually via{' '}
+                <span className="text-red-400 font-semibold">JazzCash</span>
+              </p>
+            </div>
+            <div className="mt-3 p-3 rounded-xl bg-amber-500/[0.04] border border-amber-500/10">
+              <p className="text-xs text-slate-600 leading-relaxed">
+                🌐 <span className="text-amber-400 font-semibold">International data-only eSIM.</span>{' '}
+                No local phone number. No PTA registration required. For travel use only.
               </p>
             </div>
           </div>

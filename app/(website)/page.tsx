@@ -267,7 +267,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
             { label:'Countries Covered',  val:150,  suffix:'+',    icon:Globe,          color:'text-[#0D6EFD]', bg:'bg-[rgba(13,110,253,0.05)] border-[rgba(13,110,253,0.12)]' },
-            { label:'Happy Travelers',    val:5000, suffix:'+',    icon:Users,          color:'text-[#00C6FF]', bg:'bg-[rgba(0,198,255,0.05)] border-[rgba(0,198,255,0.12)]' },
+            { label:'Happy Travelers',    val:50,   suffix:'+',    icon:Users,          color:'text-[#00C6FF]', bg:'bg-[rgba(0,198,255,0.05)] border-[rgba(0,198,255,0.12)]' },
             { label:'Delivery Time',      val:2,    suffix:' min', icon:Zap,            color:'text-[#F59E0B]', bg:'bg-[rgba(245,158,11,0.05)] border-[rgba(245,158,11,0.12)]' },
             { label:'Support',            val:24,   suffix:'/7',   icon:MessageCircle,  color:'text-[#10B981]', bg:'bg-[rgba(16,185,129,0.05)] border-[rgba(16,185,129,0.12)]' },
           ].map(({ label, val, suffix, icon: Icon, color, bg }) => (
@@ -422,7 +422,7 @@ export default function HomePage() {
             Connecting Pakistanis <span className="gradient-text">Worldwide</span>
           </h2>
           <p className="text-[#6C757D] text-base max-w-md mx-auto font-body">
-            Join 5,000+ Pakistani travelers who stay connected without roaming bills.
+            Join Pakistani travelers who stay connected without roaming bills.
           </p>
         </div>
 
@@ -729,7 +729,7 @@ export default function HomePage() {
             <Star className="w-3.5 h-3.5 fill-current" /> Trusted
           </div>
           <h2 className="display-md mb-5 text-[#212529]">
-            Loved by <span className="gradient-text">5,000+</span> Travelers
+            Loved by <span className="gradient-text">Pakistani</span> Travelers
           </h2>
           <div className="flex items-center justify-center gap-2">
             <Stars size="md" />
