@@ -22,10 +22,29 @@ export const metadata: Metadata = {
   },
 }
 
+const SCHEMA_ORG = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Axon eSIM',
+  url: 'https://www.axonesim.com',
+  logo: 'https://www.axonesim.com/logo.png',
+  contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', availableLanguage: ['English', 'Urdu'] },
+  sameAs: ['https://www.instagram.com/axonesim'],
+})
+
+const SCHEMA_WEBSITE = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Axon eSIM',
+  url: 'https://www.axonesim.com',
+})
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="h-full">
       <head>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: SCHEMA_ORG }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: SCHEMA_WEBSITE }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
