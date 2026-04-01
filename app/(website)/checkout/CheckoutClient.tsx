@@ -380,6 +380,9 @@ export default function CheckoutClient({ plan }: { plan: Plan }) {
                   <Shield className="w-3.5 h-3.5" />
                   Orders are verified manually within 2–5 minutes. eSIM delivered via WhatsApp.
                 </div>
+                <div className="text-center text-xs text-slate-600 bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 leading-relaxed">
+                  🌐 Axon eSIM provides <span className="text-slate-400 font-medium">international data-only connectivity</span> through global network partners. This service does not include a local Pakistani number and is designed for travel and cross-border use.
+                </div>
               </div>
             )}
           </div>

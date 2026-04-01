@@ -420,6 +420,9 @@ function PlanCard({
         >
           Buy Now <ChevronRight className="w-4 h-4" />
         </Link>
+        <p className="text-center text-[10px] text-[#ADB5BD] mt-2 leading-relaxed">
+          🌐 International data-only eSIM · No local number · For travel use
+        </p>
       </div>
     </div>
   )

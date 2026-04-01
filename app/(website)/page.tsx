@@ -142,9 +142,10 @@ const MAP_DOTS = [
 const FAQS = [
   { q:'What is an eSIM?', a:'An eSIM (embedded SIM) is a digital SIM built into your phone. Instead of inserting a physical card, you scan a QR code to activate a data plan instantly. No store visit needed.' },
   { q:'How fast do I get the eSIM?', a:'Within 2 minutes of payment. Your QR code is delivered to WhatsApp and email automatically. Most customers are online in under 5 minutes total.' },
-  { q:'What payment methods are accepted?', a:'JazzCash, Easypaisa, and Pakistani debit/credit cards via Safepay (in PKR). International Visa/Mastercard via Stripe (in USD). Zero hidden fees.' },
+  { q:'What payment methods are accepted?', a:'JazzCash and Easypaisa (manual bank transfer). Send payment, upload your screenshot, and your order is confirmed. Zero hidden fees.' },
   { q:'When does validity start?', a:'Validity begins when you first connect to a network abroad, NOT from the purchase date. Buy early, activate when you land.' },
   { q:'Can I use hotspot/tethering?', a:'Yes! All plans include unlimited personal hotspot. Share data with laptops, tablets, or other devices.' },
+  { q:'Is this a local Pakistani SIM?', a:'No. Axon eSIM provides international data-only connectivity through global network partners. It does not include a Pakistani phone number and is not subject to PTA local SIM registration. It is designed purely for travel and cross-border data use.' },
   { q:'Do I need to remove my Pakistani SIM?', a:'No. Your phone supports dual SIM. Keep your local number active and use the eSIM for data abroad. Just set eSIM as the data line.' },
   { q:'What speeds will I get?', a:'Full 4G LTE / 5G speeds on premium local networks. No throttling, no speed caps, no fair usage limits.' },
 ]
