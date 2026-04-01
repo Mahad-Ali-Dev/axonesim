@@ -37,9 +37,9 @@ export default function Navbar() {
             <Image
               src="/navbar_logo.png"
               alt="Axon eSIM"
-              width={340}
-              height={96}
-              className="h-24 w-auto object-contain group-hover:opacity-90 transition-opacity"
+              width={280}
+              height={72}
+              className="h-16 w-auto object-contain group-hover:opacity-90 transition-opacity"
               priority
             />
           </Link>

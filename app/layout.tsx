@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  icons: { icon: '/favicon.png', apple: '/favicon.png' },
   title: 'Axon eSIM — Instant Global Connectivity',
   description: 'Buy eSIM data plans for travel. Works in 150+ countries. Instant delivery via WhatsApp and email.',
   keywords: 'eSIM, travel SIM, international data, roaming, Pakistan, JazzCash, Easypaisa',
