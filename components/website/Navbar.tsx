@@ -144,6 +144,17 @@ export default function Navbar() {
           >
             <Phone className="w-3.5 h-3.5" /> WhatsApp Support
           </a>
+          <Link
+            href="/account"
+            onClick={() => setOpen(false)}
+            className={`flex items-center gap-2 text-sm px-4 py-3 rounded-xl transition-all font-medium font-heading ${
+              scrolled
+                ? 'text-[#212529] hover:bg-[rgba(13,110,253,0.05)]'
+                : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'
+            }`}
+          >
+            <User className="w-3.5 h-3.5" /> Account / Login
+          </Link>
           <div className="pt-2">
             <Link
               href="/plans"
