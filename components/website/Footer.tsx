@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Wifi, MessageCircle, Mail, MapPin, Globe, Shield, ArrowUpRight } from 'lucide-react'
+import Image from 'next/image'
+import { MessageCircle, Mail, MapPin, Globe, Shield, ArrowUpRight } from 'lucide-react'
 
 const PLAN_LINKS = ['Asia', 'Europe', 'Middle East', 'Americas', 'Global']
 const SUPPORT_LINKS = [
@@ -24,14 +25,8 @@ export default function Footer() {
 
           {/* Brand column */}
           <div className="lg:col-span-1">
-            <Link href="/" className="inline-flex items-center gap-2.5 mb-6 group">
-              <div className="w-8 h-8 rounded-[10px] bg-gradient-to-br from-violet-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-violet-600/20 group-hover:shadow-violet-600/40 transition-all duration-300">
-                <Wifi className="w-4 h-4 text-white" strokeWidth={2.5} />
-              </div>
-              <span className="text-base font-black">
-                <span className="gradient-text">Axon</span>
-                <span className="text-white"> eSIM</span>
-              </span>
+            <Link href="/" className="inline-flex mb-6 group">
+              <Image src="/footer_logo.png" alt="Axon eSIM" width={340} height={100} className="h-28 w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity" />
             </Link>
 
             <p className="text-sm text-slate-600 leading-relaxed mb-8 max-w-xs">
@@ -49,13 +44,13 @@ export default function Footer() {
                 +92 334 9542871
               </a>
               <a
-                href="mailto:support@axonesim.com"
+                href="mailto:supportaxonesim@gmail.com"
                 className="flex items-center gap-3 text-sm text-slate-600 hover:text-violet-400 transition-colors group"
               >
                 <div className="w-8 h-8 rounded-xl bg-violet-500/6 border border-violet-500/12 flex items-center justify-center flex-shrink-0 group-hover:bg-violet-500/12 group-hover:border-violet-500/25 transition-all">
                   <Mail className="w-3.5 h-3.5 text-violet-400" />
                 </div>
-                support@axonesim.com
+                supportaxonesim@gmail.com
               </a>
               <div className="flex items-center gap-3 text-sm text-slate-600">
                 <div className="w-8 h-8 rounded-xl bg-cyan-500/6 border border-cyan-500/12 flex items-center justify-center flex-shrink-0">
@@ -140,7 +135,7 @@ export default function Footer() {
       <div className="border-t border-white/[0.03]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-700">
-            &copy; {new Date().getFullYear()} Axon eSIM &middot; Tase LLC
+            &copy; {new Date().getFullYear()} Axon Telecom &middot; A project by Tase LLC
           </p>
           <div className="flex items-center gap-5">
             {LEGAL_LINKS.map(({ label, href }) => (

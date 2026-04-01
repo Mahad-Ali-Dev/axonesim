@@ -4,18 +4,18 @@ import { WhyAxonSection } from '@/components/website/why-axon-section'
 import {
   Globe, Shield, Zap, MessageCircle, Star, CheckCircle2,
   ChevronRight, Smartphone, CreditCard, Clock, Lock,
-  MapPin, Signal, ArrowRight, Sparkles, Wifi, ChevronDown,
+  Signal, ArrowRight, Sparkles, Wifi, ChevronDown,
   Plane, QrCode, Download, Users,
 } from 'lucide-react'
 import { TypingAnimation } from '@/components/ui/typing-animation'
 import { Button as MovingBorderBtn } from '@/components/ui/moving-border'
-import { TracingBeam } from '@/components/ui/tracing-beam'
+
 import { OrbitingCircles } from '@/components/ui/orbiting-circles'
 import { MaskContainer } from '@/components/ui/svg-mask-effect'
 import { AnimatedCounter } from '@/components/ui/animated-counter'
 import { Marquee } from '@/components/ui/marquee'
 import { TextFlippingBoard } from '@/components/ui/text-flipping-board'
-import { Terminal } from '@/components/ui/terminal'
+
 import { TiltCard } from '@/components/ui/tilt-card'
 import { World } from '@/components/ui/globe-client'
 import { WorldMap } from '@/components/ui/world-map-client'
@@ -427,31 +427,37 @@ export default function HomePage() {
         </div>
 
         {/* Masonry-style photo wall */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 px-5 max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 px-5 max-w-6xl mx-auto auto-rows-[200px]">
           {[
-            { src: '/reviews/005273e0-2520-4f8f-88b5-bef916dac8d1.jpg', country: 'Dubai', span: 'row-span-2' },
-            { src: '/reviews/493cad10-8c6b-4ab8-8630-ce7d718103a2.jpg', country: 'London' },
-            { src: '/reviews/499e35cc-fa19-45ee-b135-df8761b216f5.jpg', country: 'Singapore' },
-            { src: '/reviews/81cfe78d-6c5a-4744-80c4-a3a1cb706aec.jpg', country: 'Paris', span: 'row-span-2' },
-            { src: '/reviews/51a32e72-f1f1-4cdc-bc15-6781bea58a26.jpg', country: 'Tokyo' },
-            { src: '/reviews/42fd1d48-5ac0-4927-b254-c8beed5abda9.jpg', country: 'New York' },
-            { src: '/reviews/6eb287f1-b191-46d4-8f9c-d05ad5d1ee57.jpg', country: 'Istanbul' },
-            { src: '/reviews/d7e87634-9166-4fca-805a-6776c97d7e3e.jpg', country: 'Kuala Lumpur', span: 'col-span-2' },
-          ].map(({ src, country, span }) => (
+            { src: '/travelers/dubai.png', country: 'Dubai', flag: '🇦🇪', span: 'row-span-2' },
+            { src: '/travelers/london.png', country: 'London', flag: '🇬🇧' },
+            { src: '/travelers/singapore.png', country: 'Singapore', flag: '🇸🇬' },
+            { src: '/travelers/paris.png', country: 'Paris', flag: '🇫🇷', span: 'row-span-2' },
+            { src: '/travelers/tokyo.png', country: 'Tokyo', flag: '🇯🇵' },
+            { src: '/travelers/newyork.png', country: 'New York', flag: '🇺🇸' },
+            { src: '/travelers/istanbul.png', country: 'Istanbul', flag: '🇹🇷' },
+            { src: '/travelers/kl.png', country: 'Kuala Lumpur', flag: '🇲🇾', span: 'col-span-2' },
+          ].map(({ src, country, flag, span }) => (
             <div
               key={src}
               className={`relative overflow-hidden rounded-2xl bg-[#E9ECEF] group ${span || ''}`}
-              style={{ minHeight: '200px' }}
             >
               <img
                 src={src}
                 alt={`Pakistani traveler in ${country}`}
                 className="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500"
               />
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               {/* Country badge */}
               <div className="absolute bottom-3 left-3 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1.5">
-                <MapPin className="w-3 h-3 text-white" />
+                <span className="text-sm">{flag}</span>
                 <span className="text-white text-xs font-semibold font-heading">{country}</span>
+              </div>
+              {/* Connected badge */}
+              <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-[#10B981]/90 backdrop-blur-sm rounded-full px-2.5 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <Signal className="w-3 h-3 text-white" />
+                <span className="text-white text-[10px] font-bold font-heading">Connected</span>
               </div>
             </div>
           ))}
@@ -460,183 +466,147 @@ export default function HomePage() {
 
       <div className="divider-fade" />
 
-      {/* ═══════════════════ HOW IT WORKS ═══════════════════ */}
+      {/* ═══════════════════ STEP-BY-STEP SETUP GUIDE ═══════════════════ */}
       <section className="section" style={{ background: '#FFFFFF' }}>
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-20">
-            <div className="badge-pill badge-cyan inline-flex mb-5">
-              <Zap className="w-3.5 h-3.5" /> How It Works
-            </div>
-            <h2 className="display-md mb-5 text-[#212529]">
-              Online in <span className="gradient-text">5 Minutes</span>
-            </h2>
-            <p className="text-[#6C757D] text-lg font-body">No store. No paperwork. No waiting.</p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-            {/* Steps */}
-            <TracingBeam>
-              <div className="space-y-14 pl-4">
-                {[
-                  {
-                    n: '01', icon: Globe, title: 'Choose Your Plan',
-                    desc: 'Browse plans by region, data size, and duration. All plans include 150+ country coverage and 4G/5G speeds.',
-                    color: 'violet' as const,
-                  },
-                  {
-                    n: '02', icon: CreditCard, title: 'Pay in PKR or USD',
-                    desc: 'JazzCash, Easypaisa, or Pakistani debit/credit card in PKR. International Visa/Mastercard via Stripe in USD.',
-                    color: 'cyan' as const,
-                  },
-                  {
-                    n: '03', icon: QrCode, title: 'Get QR on WhatsApp',
-                    desc: 'Your eSIM QR code arrives on WhatsApp and email within 2 minutes. No waiting, no physical SIM needed.',
-                    color: 'green' as const,
-                  },
-                  {
-                    n: '04', icon: Wifi, title: 'Scan & Go Online',
-                    desc: 'Settings → Cellular → Add eSIM → Scan QR. You\'re online in 60 seconds. Data activates when you land.',
-                    color: 'amber' as const,
-                  },
-                ].map(({ n, icon: Icon, title, desc, color }) => {
-                  const s = {
-                    violet: { icon: 'bg-[rgba(13,110,253,0.08)] border-[rgba(13,110,253,0.15)]', text: 'text-[#0D6EFD]' },
-                    cyan:   { icon: 'bg-[rgba(0,198,255,0.08)] border-[rgba(0,198,255,0.15)]',   text: 'text-[#00A3D9]' },
-                    green:  { icon: 'bg-[rgba(16,185,129,0.08)] border-[rgba(16,185,129,0.15)]', text: 'text-[#10B981]' },
-                    amber:  { icon: 'bg-[rgba(245,158,11,0.08)] border-[rgba(245,158,11,0.15)]', text: 'text-[#D97706]' },
-                  }[color]
-                  return (
-                    <div key={n} className="flex gap-5 items-start group">
-                      <div className={`feature-icon border ${s.icon} group-hover:scale-110 transition-transform duration-300`}>
-                        <Icon className={`w-5 h-5 ${s.text}`} />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="text-[11px] text-[#ADB5BD] font-display font-bold tracking-wider">{n}</span>
-                          <h3 className="font-black text-lg text-[#212529] font-heading">{title}</h3>
-                        </div>
-                        <p className="text-[#6C757D] text-sm leading-relaxed font-body">{desc}</p>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </TracingBeam>
-
-            {/* Terminal */}
-            <div className="hidden lg:block sticky top-32">
-              <Terminal
-                commands={[
-                  'axon purchase --plan "10GB Global" --pay jazzcash',
-                  'axon status --order AXN-2024-0847',
-                  'axon activate --scan-qr',
-                  'speedtest --server singapore',
-                ]}
-                outputs={{
-                  0: ['Processing JazzCash payment... Rs 2,450', 'Payment confirmed! Order: AXN-2024-0847'],
-                  1: ['Status: QR Code Delivered', 'WhatsApp: Sent to +92 334 ****871', 'Email: Sent to a****@gmail.com'],
-                  2: ['Scanning QR code...', 'eSIM installed successfully!', 'Network: Connected to Singtel 5G'],
-                  3: ['Download: 87.4 Mbps', 'Upload: 34.2 Mbps', 'Latency: 12ms'],
-                }}
-                username="traveler"
-                typingSpeed={40}
-                delayBetweenCommands={1500}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div className="divider-fade" />
-
-      {/* ═══════════════════ SETUP GUIDE ═══════════════════ */}
-      <section id="setup-guide" className="section relative overflow-hidden" style={{ background: '#F8F9FA' }}>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] rounded-full opacity-[0.04] blur-[160px] pointer-events-none" style={{ background: 'radial-gradient(circle, #0D6EFD, transparent 70%)' }} />
-
-        <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <div className="badge-pill badge-green inline-flex mb-5">
-              <Smartphone className="w-3.5 h-3.5" /> Setup Guide
+              <Smartphone className="w-3.5 h-3.5" /> Step-by-Step Guide
             </div>
             <h2 className="display-md mb-5 text-[#212529]">
-              Install in <span className="gradient-text">60 Seconds</span>
+              Setup Your eSIM in <span className="gradient-text">3 Easy Steps</span>
             </h2>
             <p className="text-[#6C757D] text-lg max-w-lg mx-auto font-body">
-              Three quick steps to go from purchase to connected — no store visit, no tech knowledge needed.
+              Please follow these steps exactly. Most activation issues can be resolved by correctly configuring the Cellular / Mobile Data settings on your device.
             </p>
           </div>
 
-          {/* Steps grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
-            {[
-              {
-                step: '01',
-                title: 'Buy & Receive QR',
-                desc: 'Choose your plan, pay with JazzCash, Easypaisa, or card. Your QR code arrives on WhatsApp & email within 2 minutes.',
-                icon: QrCode,
-                color: '#0D6EFD',
-                bg: 'rgba(13,110,253,0.06)',
-                border: 'rgba(13,110,253,0.14)',
-                image: '/settings/914ddd23-f261-406e-8d17-477724299be4.jpg',
-              },
-              {
-                step: '02',
-                title: 'Open Phone Settings',
-                desc: 'Go to Settings → Cellular (or Mobile Data) → Add eSIM. Tap "Use QR Code" and scan the code we sent you.',
-                icon: Smartphone,
-                color: '#00C6FF',
-                bg: 'rgba(0,198,255,0.06)',
-                border: 'rgba(0,198,255,0.14)',
-                image: '/settings/4ec00120-03bc-44b0-b974-8ab860a7661e.jpg',
-              },
-              {
-                step: '03',
-                title: 'Land & Go Online',
-                desc: 'Set the eSIM as your data line in phone settings. When you land abroad, it connects automatically to the local 4G/5G network.',
-                icon: Wifi,
-                color: '#10B981',
-                bg: 'rgba(16,185,129,0.06)',
-                border: 'rgba(16,185,129,0.14)',
-                image: '/settings/ab617d1f-4991-4607-838e-f2d1d6d2001f.jpg',
-              },
-            ].map(({ step, title, desc, icon: Icon, color, bg, border, image }) => (
-              <div key={step} className="relative bg-white rounded-3xl border border-[rgba(0,0,0,0.06)] overflow-hidden hover:border-[rgba(13,110,253,0.15)] hover:shadow-xl hover:shadow-blue-600/06 transition-all duration-300 group hover:-translate-y-1">
-                {/* Step image */}
-                <div className="relative h-52 overflow-hidden" style={{ background: bg }}>
+          {/* Steps */}
+          <div className="space-y-8">
+
+            {/* Step 1 */}
+            <div className="relative rounded-3xl border border-[rgba(0,0,0,0.06)] bg-white overflow-hidden hover:border-[rgba(13,110,253,0.15)] hover:shadow-xl hover:shadow-blue-600/5 transition-all duration-300">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+                {/* Text */}
+                <div className="p-8 sm:p-10 flex flex-col justify-center">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm font-display text-white shadow-lg" style={{ background: '#0D6EFD' }}>
+                      01
+                    </div>
+                    <h3 className="font-black text-xl text-[#212529] font-heading">Scan the QR Code</h3>
+                  </div>
+                  <p className="text-[#6C757D] text-sm leading-relaxed font-body mb-6">
+                    Go to <strong className="text-[#212529]">Settings → Cellular</strong> (or Mobile Data) → <strong className="text-[#212529]">Add eSIM</strong> (or Add Data Plan). Center the QR code in the frame to install the eSIM.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-[rgba(13,110,253,0.06)] border border-[rgba(13,110,253,0.12)] text-[#0D6EFD]">
+                      <CheckCircle2 className="w-3 h-3" /> QR sent via WhatsApp
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-[rgba(16,185,129,0.06)] border border-[rgba(16,185,129,0.12)] text-[#10B981]">
+                      <CheckCircle2 className="w-3 h-3" /> Takes 30 seconds
+                    </span>
+                  </div>
+                </div>
+                {/* Image */}
+                <div className="relative bg-[#0a0a0a] flex items-center justify-center p-6 min-h-[320px]">
                   <img
-                    src={image}
-                    alt={title}
-                    className="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
+                    src="/settings/914ddd23-f261-406e-8d17-477724299be4.jpg"
+                    alt="iPhone eSIM settings - Turn on line and data roaming"
+                    className="rounded-2xl shadow-2xl max-h-[400px] w-auto object-contain"
                   />
-                  {/* Step number badge */}
-                  <div className="absolute top-4 left-4 w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm font-display text-white shadow-lg" style={{ background: color }}>
-                    {step}
-                  </div>
                 </div>
-
-                {/* Content */}
-                <div className="p-6">
-                  <div className="w-10 h-10 rounded-2xl flex items-center justify-center mb-4" style={{ background: bg, border: `1px solid ${border}` }}>
-                    <Icon className="w-5 h-5" style={{ color }} />
-                  </div>
-                  <h3 className="font-black text-lg text-[#212529] mb-2 font-heading">{title}</h3>
-                  <p className="text-sm text-[#6C757D] leading-relaxed font-body">{desc}</p>
-                </div>
-
-                {/* Colored bottom line */}
-                <div className="h-0.5 w-full" style={{ background: `linear-gradient(90deg, ${color}, transparent)` }} />
               </div>
-            ))}
+              {/* Colored bottom line */}
+              <div className="h-0.5 w-full" style={{ background: 'linear-gradient(90deg, #0D6EFD, transparent)' }} />
+            </div>
+
+            {/* Step 2 */}
+            <div className="relative rounded-3xl border border-[rgba(0,0,0,0.06)] bg-white overflow-hidden hover:border-[rgba(0,198,255,0.15)] hover:shadow-xl hover:shadow-cyan-600/5 transition-all duration-300">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+                {/* Image (left on desktop) */}
+                <div className="relative bg-[#0a0a0a] flex items-center justify-center p-6 min-h-[320px] order-2 md:order-1">
+                  <img
+                    src="/settings/4ec00120-03bc-44b0-b974-8ab860a7661e.jpg"
+                    alt="iPhone Mobile Data Network APN settings"
+                    className="rounded-2xl shadow-2xl max-h-[400px] w-auto object-contain"
+                  />
+                </div>
+                {/* Text */}
+                <div className="p-8 sm:p-10 flex flex-col justify-center order-1 md:order-2">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm font-display text-white shadow-lg" style={{ background: '#00C6FF' }}>
+                      02
+                    </div>
+                    <h3 className="font-black text-xl text-[#212529] font-heading">Turn On eSIM & Data Roaming</h3>
+                  </div>
+                  <p className="text-[#6C757D] text-sm leading-relaxed font-body mb-6">
+                    After installation, select the new eSIM. Ensure its switch is <strong className="text-[#212529]">&apos;On&apos;</strong>. Now, turn on <strong className="text-[#212529]">&apos;Data Roaming&apos;</strong> for this specific line. This step is critical for international connectivity.
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm text-[#6C757D] font-body">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#00A3D9] flex-shrink-0" />
+                      Set APN to <strong className="text-[#212529] ml-1">&quot;plus&quot;</strong>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-[#6C757D] font-body">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#00A3D9] flex-shrink-0" />
+                      Leave Username & Password empty
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-[#6C757D] font-body">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#00A3D9] flex-shrink-0" />
+                      Enable Data Roaming toggle
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* Colored bottom line */}
+              <div className="h-0.5 w-full" style={{ background: 'linear-gradient(90deg, #00C6FF, transparent)' }} />
+            </div>
+
+            {/* Step 3 */}
+            <div className="relative rounded-3xl border border-[rgba(0,0,0,0.06)] bg-white overflow-hidden hover:border-[rgba(16,185,129,0.15)] hover:shadow-xl hover:shadow-emerald-600/5 transition-all duration-300">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+                {/* Text */}
+                <div className="p-8 sm:p-10 flex flex-col justify-center">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm font-display text-white shadow-lg" style={{ background: '#10B981' }}>
+                      03
+                    </div>
+                    <h3 className="font-black text-xl text-[#212529] font-heading">Select LTE & Go Online</h3>
+                  </div>
+                  <p className="text-[#6C757D] text-sm leading-relaxed font-body mb-6">
+                    Go to <strong className="text-[#212529]">Voice & Data</strong> and select <strong className="text-[#212529]">LTE</strong>. Enable <strong className="text-[#212529]">VoLTE</strong> for best performance. When you land abroad, the eSIM connects automatically to the local 4G/5G network.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-[rgba(16,185,129,0.06)] border border-[rgba(16,185,129,0.12)] text-[#10B981]">
+                      <Wifi className="w-3 h-3" /> Auto-connects on landing
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-[rgba(245,158,11,0.06)] border border-[rgba(245,158,11,0.12)] text-[#D97706]">
+                      <Signal className="w-3 h-3" /> Full 4G/5G speeds
+                    </span>
+                  </div>
+                </div>
+                {/* Image */}
+                <div className="relative bg-[#0a0a0a] flex items-center justify-center p-6 min-h-[320px]">
+                  <img
+                    src="/settings/ab617d1f-4991-4607-838e-f2d1d6d2001f.jpg"
+                    alt="iPhone Voice & Data settings showing LTE selected and VoLTE enabled"
+                    className="rounded-2xl shadow-2xl max-h-[400px] w-auto object-contain"
+                  />
+                </div>
+              </div>
+              {/* Colored bottom line */}
+              <div className="h-0.5 w-full" style={{ background: 'linear-gradient(90deg, #10B981, transparent)' }} />
+            </div>
           </div>
 
-          {/* Pro tips row */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Pro tips */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10">
             {[
               { icon: '💡', tip: 'Buy before you fly', desc: 'Purchase at home to avoid airport rush. eSIM activates only when you land.' },
               { icon: '📱', tip: 'Keep your local SIM', desc: 'Dual SIM means your Pakistani number stays active for calls while eSIM handles data.' },
               { icon: '🔋', tip: 'First time connecting?', desc: 'May take 2-3 minutes to register on local network after landing. Perfectly normal!' },
             ].map(({ icon, tip, desc }) => (
-              <div key={tip} className="flex items-start gap-3.5 p-4 bg-white rounded-2xl border border-[rgba(0,0,0,0.06)]">
+              <div key={tip} className="flex items-start gap-3.5 p-4 bg-[#F8F9FA] rounded-2xl border border-[rgba(0,0,0,0.06)] hover:border-[rgba(13,110,253,0.12)] hover:shadow-sm transition-all duration-200">
                 <span className="text-2xl flex-shrink-0">{icon}</span>
                 <div>
                   <div className="font-bold text-sm text-[#212529] mb-1 font-heading">{tip}</div>
@@ -647,6 +617,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+
 
       <div className="divider-glow" />
 

@@ -126,7 +126,7 @@ export default function ActivatePage() {
               Browse Plans
             </Link>
             <a
-              href="https://wa.me/923110000000"
+              href="https://wa.me/923349542871"
               className="w-full sm:w-auto bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold px-6 py-3 rounded-full text-sm transition-colors flex items-center justify-center gap-2"
             >
               <MessageCircle className="w-4 h-4" />

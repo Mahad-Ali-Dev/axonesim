@@ -1,5 +1,5 @@
 import { createAdminClient } from '@/lib/supabase'
-import { sendOrderConfirmationEmail } from '@/lib/email'
+import { sendESIMDeliveryEmail } from '@/lib/email'
 import { sendOrderWhatsApp } from '@/lib/whatsapp'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL!
@@ -47,16 +47,15 @@ export async function deliverESIM(orderId: string): Promise<void> {
 
   // Send email
   try {
-    await sendOrderConfirmationEmail({
-      customerName: order.customers.name,
+    await sendESIMDeliveryEmail({
+      customerName:  order.customers.name,
       customerEmail: order.customers.email,
       orderId,
-      planName: order.plans.name,
-      dataGb: order.plans.data_gb,
-      validityDays: order.plans.validity_days,
+      planName:      order.plans.name,
+      dataGb:        order.plans.data_gb,
+      validityDays:  order.plans.validity_days,
       qrCodeUrl,
       esimCode,
-      activationGuideUrl: `${APP_URL}/activate`,
     })
   } catch (e) {
     console.error('Email send failed:', e)

@@ -1,12 +1,14 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import { Menu, X, Wifi, Phone, Sparkles, Globe } from 'lucide-react'
+import { Menu, X, Phone, Sparkles, Globe, User } from 'lucide-react'
 
 const NAV_LINKS = [
   { label: 'Plans', href: '/plans' },
-  { label: 'Setup Guide', href: '/#setup-guide' },
+  { label: 'Setup Guide', href: '/setup-guide' },
   { label: 'Activate', href: '/activate' },
+  { label: 'Track Order', href: '/order' },
 ]
 
 export default function Navbar() {
@@ -28,17 +30,18 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
-        <div className="flex items-center justify-between h-[64px]">
+        <div className="flex items-center justify-between h-[88px]">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="relative w-8 h-8 rounded-[10px] bg-gradient-to-br from-[#0D6EFD] to-[#0A58CA] flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:shadow-blue-600/40 group-hover:scale-105 transition-all duration-300">
-              <Wifi className="w-4 h-4 text-white" strokeWidth={2.5} />
-            </div>
-            <span className="text-base font-black tracking-tight font-heading">
-              <span className="gradient-text">Axon</span>
-              <span className={`${scrolled ? 'text-[#212529]' : 'text-white'} transition-colors duration-500`}> eSIM</span>
-            </span>
+          <Link href="/" className="flex items-center shrink-0 group">
+            <Image
+              src="/navbar_logo.png"
+              alt="Axon eSIM"
+              width={340}
+              height={96}
+              className="h-24 w-auto object-contain group-hover:opacity-90 transition-opacity"
+              priority
+            />
           </Link>
 
           {/* Desktop: nav links in a pill container */}
@@ -76,7 +79,15 @@ export default function Navbar() {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2">
+            <Link
+              href="/account"
+              className={`flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-full transition-all duration-200 font-heading ${
+                scrolled ? 'text-[#6C757D] hover:text-[#212529] hover:bg-[rgba(13,110,253,0.05)]' : 'text-slate-400 hover:text-white hover:bg-white/[0.06]'
+              }`}
+            >
+              <User className="w-3.5 h-3.5" /> Account
+            </Link>
             <Link
               href="/plans"
               className="flex items-center gap-2 text-sm font-bold px-5 py-2.5 rounded-full bg-gradient-to-r from-[#0D6EFD] to-[#0A58CA] text-white shadow-lg shadow-blue-600/20 hover:shadow-blue-600/40 hover:scale-[1.03] transition-all duration-300 font-heading"

@@ -1,6 +1,7 @@
 import { createServiceClient } from '@/lib/supabase'
-import { ShoppingCart, TrendingUp, Users, Wifi, Package } from 'lucide-react'
+import { ShoppingCart, TrendingUp, Users, Package, BarChart2 } from 'lucide-react'
 import Link from 'next/link'
+import DashboardMiniChart from '@/components/admin/DashboardMiniChart'
 
 export const revalidate = 30
 
@@ -9,45 +10,67 @@ async function getStats() {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
+  const sevenDaysAgo = new Date()
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+
   const [
     { count: totalOrders },
     { count: todayOrders },
     { data: revenueData },
     { count: totalCustomers },
     { data: recentOrders },
+    { data: trendOrders },
   ] = await Promise.all([
     supabase.from('orders').select('*', { count: 'exact', head: true }),
     supabase.from('orders').select('*', { count: 'exact', head: true }).gte('created_at', today.toISOString()),
-    supabase.from('orders').select('amount_paid, currency').eq('status', 'delivered').or('status.eq.activated'),
+    supabase.from('orders').select('amount_paid, currency').in('status', ['delivered', 'activated']),
     supabase.from('customers').select('*', { count: 'exact', head: true }),
     supabase.from('orders').select('*, customers(name,email), plans(name)').order('created_at', { ascending: false }).limit(8),
+    supabase.from('orders').select('amount_paid, currency, created_at, status')
+      .gte('created_at', sevenDaysAgo.toISOString())
+      .in('status', ['delivered', 'activated', 'paid'])
+      .order('created_at', { ascending: true }),
   ])
 
   const revenueArr = (revenueData || []) as any[]
   const pkrRevenue = revenueArr.filter(o => o.currency === 'PKR').reduce((s: number, o: any) => s + o.amount_paid, 0)
   const usdRevenue = revenueArr.filter(o => o.currency === 'USD').reduce((s: number, o: any) => s + o.amount_paid, 0)
 
-  return { totalOrders, todayOrders, pkrRevenue, usdRevenue, totalCustomers, recentOrders }
+  // Build 7-day trend data
+  const trendMap: Record<string, { pkr: number; usd: number }> = {}
+  ;(trendOrders || []).forEach((o: any) => {
+    const day = (o.created_at as string).slice(5, 10)
+    if (!trendMap[day]) trendMap[day] = { pkr: 0, usd: 0 }
+    if (o.currency === 'PKR') trendMap[day].pkr += o.amount_paid
+    else trendMap[day].usd += o.amount_paid
+  })
+  const trendData = Object.entries(trendMap).map(([day, v]) => ({
+    day,
+    pkr: Math.round(v.pkr),
+    usd: parseFloat(v.usd.toFixed(2)),
+  }))
+
+  return { totalOrders, todayOrders, pkrRevenue, usdRevenue, totalCustomers, recentOrders, trendData }
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: 'bg-yellow-400/10 text-yellow-400',
-  paid: 'bg-blue-400/10 text-blue-400',
+  pending:    'bg-yellow-400/10 text-yellow-400',
+  paid:       'bg-blue-400/10 text-blue-400',
   processing: 'bg-cyan-400/10 text-cyan-400',
-  delivered: 'bg-green-400/10 text-green-400',
-  activated: 'bg-green-400/10 text-green-400',
-  expired: 'bg-gray-400/10 text-gray-400',
-  cancelled: 'bg-red-400/10 text-red-400',
+  delivered:  'bg-green-400/10 text-green-400',
+  activated:  'bg-green-400/10 text-green-400',
+  expired:    'bg-gray-400/10 text-gray-400',
+  cancelled:  'bg-red-400/10 text-red-400',
 }
 
 export default async function DashboardPage() {
-  const { totalOrders, todayOrders, pkrRevenue, usdRevenue, totalCustomers, recentOrders } = await getStats()
+  const { totalOrders, todayOrders, pkrRevenue, usdRevenue, totalCustomers, recentOrders, trendData } = await getStats()
 
   const stats = [
-    { label: 'Total Orders', value: totalOrders ?? 0, icon: ShoppingCart, color: 'text-cyan-400', bg: 'bg-cyan-400/10' },
-    { label: "Today's Orders", value: todayOrders ?? 0, icon: TrendingUp, color: 'text-green-400', bg: 'bg-green-400/10' },
-    { label: 'Total Customers', value: totalCustomers ?? 0, icon: Users, color: 'text-purple-400', bg: 'bg-purple-400/10' },
-    { label: 'Revenue (PKR)', value: `Rs ${(pkrRevenue).toLocaleString()}`, icon: Package, color: 'text-yellow-400', bg: 'bg-yellow-400/10' },
+    { label: 'Total Orders',    value: totalOrders ?? 0,               icon: ShoppingCart, color: 'text-cyan-400',   bg: 'bg-cyan-400/10'   },
+    { label: "Today's Orders",  value: todayOrders ?? 0,               icon: TrendingUp,   color: 'text-green-400',  bg: 'bg-green-400/10'  },
+    { label: 'Total Customers', value: totalCustomers ?? 0,            icon: Users,        color: 'text-purple-400', bg: 'bg-purple-400/10' },
+    { label: 'PKR Revenue',     value: `Rs ${pkrRevenue.toLocaleString()}`, icon: Package, color: 'text-yellow-400', bg: 'bg-yellow-400/10' },
   ]
 
   return (
@@ -57,8 +80,8 @@ export default async function DashboardPage() {
         <p className="text-gray-500 text-sm">Welcome back, Admin</p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+      {/* Stat cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
         {stats.map(({ label, value, icon: Icon, color, bg }) => (
           <div key={label} className="bg-[#111] border border-white/5 rounded-2xl p-5">
             <div className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center mb-3`}>
@@ -70,14 +93,31 @@ export default async function DashboardPage() {
         ))}
       </div>
 
-      {/* USD Revenue */}
-      {usdRevenue > 0 && (
-        <div className="bg-[#111] border border-white/5 rounded-2xl p-5 mb-8 flex items-center justify-between">
+      {/* Revenue trend chart */}
+      <div className="bg-[#111] border border-white/5 rounded-2xl p-5 mb-6">
+        <div className="flex items-center justify-between mb-4">
           <div>
-            <div className="text-sm text-gray-500 mb-1">USD Revenue</div>
+            <h2 className="font-bold text-sm">Revenue Trend — Last 7 Days</h2>
+            <p className="text-xs text-gray-500 mt-0.5">PKR &amp; USD</p>
+          </div>
+          <div className="flex items-center gap-4 text-xs text-gray-500">
+            <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-cyan-400 inline-block rounded" /> PKR</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-emerald-400 inline-block rounded" /> USD</span>
+            <Link href="/admin/analytics" className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+              <BarChart2 className="w-3 h-3" /> Full Analytics →
+            </Link>
+          </div>
+        </div>
+        <DashboardMiniChart data={trendData} />
+      </div>
+
+      {/* USD banner (only if has data) */}
+      {usdRevenue > 0 && (
+        <div className="bg-[#111] border border-white/5 rounded-2xl p-5 mb-6 flex items-center justify-between">
+          <div>
+            <div className="text-sm text-gray-500 mb-1">Total USD Revenue</div>
             <div className="text-xl font-bold text-green-400">${usdRevenue.toFixed(2)}</div>
           </div>
-          <Wifi className="w-8 h-8 text-white/5" />
         </div>
       )}
 
@@ -100,7 +140,7 @@ export default async function DashboardPage() {
             </thead>
             <tbody>
               {(recentOrders ?? []).map((order: any) => (
-                <tr key={order.id} className="border-b border-white/3 hover:bg-white/2 transition-colors">
+                <tr key={order.id} className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
                   <td className="px-5 py-3">
                     <Link href={`/admin/orders/${order.id}`} className="text-cyan-400 hover:text-cyan-300 font-mono text-sm">
                       {order.id}

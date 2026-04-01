@@ -3,16 +3,58 @@ import { createAdminClient } from '@/lib/supabase'
 import { createSafepayTracker } from '@/lib/safepay'
 import { stripe } from '@/lib/stripe'
 import { generateOrderId } from '@/lib/utils'
+import { STATIC_PLANS_BY_ID } from '@/data/plans'
+import { sendOrderReceivedEmail } from '@/lib/email'
 
 export async function POST(req: NextRequest) {
   try {
-    const { planId, customer, paymentMethod, currency, amount } = await req.json()
+    const { planId, customer, paymentMethod, currency, amount, screenshotUrl } = await req.json()
 
     if (!planId || !customer?.name || !customer?.email || !customer?.phone || !paymentMethod) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
     const supabase = createAdminClient()
+
+    // Resolve static plan ID (e.g. "p-5gb") to a real DB UUID
+    let resolvedPlanId = planId
+    if (STATIC_PLANS_BY_ID[planId]) {
+      const staticPlan = STATIC_PLANS_BY_ID[planId]
+      // Find matching plan in DB by data size and validity
+      const { data: dbPlan } = await supabase
+        .from('plans')
+        .select('id')
+        .eq('data_gb', staticPlan.data_gb)
+        .eq('validity_days', staticPlan.validity_days)
+        .single()
+
+      if (dbPlan) {
+        resolvedPlanId = dbPlan.id
+      } else {
+        // Plan not in DB yet — upsert it now
+        const { data: inserted } = await supabase
+          .from('plans')
+          .insert({
+            name: staticPlan.name,
+            data_gb: staticPlan.data_gb,
+            validity_days: staticPlan.validity_days,
+            region: staticPlan.region,
+            countries: staticPlan.countries,
+            price_pkr: staticPlan.price_pkr,
+            price_usd: staticPlan.price_usd,
+            is_active: true,
+            is_featured: staticPlan.is_featured,
+            badge: staticPlan.badge,
+            description: staticPlan.description,
+          })
+          .select('id')
+          .single()
+        if (!inserted) {
+          return NextResponse.json({ error: 'Failed to resolve plan' }, { status: 500 })
+        }
+        resolvedPlanId = inserted.id
+      }
+    }
 
     // Upsert customer
     let customerId: string
@@ -59,7 +101,7 @@ export async function POST(req: NextRequest) {
     const { error: orderError } = await supabase.from('orders').insert({
       id: orderId,
       customer_id: customerId,
-      plan_id: planId,
+      plan_id: resolvedPlanId,
       status: 'pending',
       payment_method: paymentMethod,
       amount_paid: amount,
@@ -116,6 +158,33 @@ export async function POST(req: NextRequest) {
         orderId,
         stripeClientSecret: paymentIntent.client_secret,
       })
+    }
+
+    // ── MANUAL (screenshot-based — admin verifies and delivers via WhatsApp) ──
+    if (paymentMethod === 'manual') {
+      if (screenshotUrl) {
+        await supabase.from('payments').update({
+          transaction_id: `screenshot:${screenshotUrl}`,
+        }).eq('order_id', orderId).eq('gateway', 'manual')
+      }
+
+      // Fetch plan details for email
+      const { data: planRow } = await supabase.from('plans').select('name,data_gb,validity_days').eq('id', resolvedPlanId).single()
+
+      // Send order confirmation email (non-blocking)
+      sendOrderReceivedEmail({
+        customerName:  customer.name,
+        customerEmail: customer.email,
+        orderId,
+        planName:      planRow?.name      ?? 'eSIM Plan',
+        dataGb:        planRow?.data_gb   ?? 0,
+        validityDays:  planRow?.validity_days ?? 0,
+        amount,
+        currency,
+        screenshotUrl: screenshotUrl ?? null,
+      }).catch(e => console.error('Order email error:', e))
+
+      return NextResponse.json({ orderId })
     }
 
     return NextResponse.json({ error: 'Invalid payment method' }, { status: 400 })

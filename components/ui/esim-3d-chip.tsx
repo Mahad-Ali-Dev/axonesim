@@ -5,8 +5,7 @@ import { useFrame } from '@react-three/fiber'
 import { RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
 
-/* Shared clock for all sub-components */
-const sharedClock = new THREE.Clock()
+/* Shared clock functionality is now derived from useFrame state natively */
 
 /* ─── Helpers ─── */
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t
@@ -82,9 +81,9 @@ function EsimChip({ progressRef }: { progressRef: ProgressRef }) {
     posZ: -3, scale: 0, emissive: 0.12,
   })
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     const p = progressRef.current ?? 0
-    const t = sharedClock.getElapsedTime()
+    const t = state.clock.getElapsedTime()
     const a = anim.current
     const g = groupRef.current
     if (!g) return
@@ -193,7 +192,6 @@ function EsimChip({ progressRef }: { progressRef: ProgressRef }) {
 function FloatingParticles({ progressRef, count = 70 }: { progressRef: ProgressRef; count?: number }) {
   const meshRef = useRef<THREE.InstancedMesh>(null!)
   const dummy = useMemo(() => new THREE.Object3D(), [])
-  const { clock } = { clock: sharedClock }
   const colorArr = useMemo(() => {
     const c = new Float32Array(count * 3)
     const blue = new THREE.Color('#0D6EFD')
@@ -212,8 +210,8 @@ function FloatingParticles({ progressRef, count = 70 }: { progressRef: ProgressR
     offset: Math.random() * Math.PI * 2,
   })), [count])
 
-  useFrame(() => {
-    const t = sharedClock.getElapsedTime()
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime()
     const p = progressRef.current ?? 0
     const reveal = smoothstep(0, 0.15, p)
     const mesh = meshRef.current
@@ -233,7 +231,7 @@ function FloatingParticles({ progressRef, count = 70 }: { progressRef: ProgressR
   })
 
   return (
-    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+    <instancedMesh ref={meshRef} args={[null as any, null as any, count]}>
       <sphereGeometry args={[1, 6, 6]}>
         <instancedBufferAttribute attach="attributes-color" args={[colorArr, 3]} />
       </sphereGeometry>
@@ -275,14 +273,13 @@ function GlowRings({ progressRef }: { progressRef: ProgressRef }) {
 /* ─── Speed Lines (Phase 3) ─── */
 function SpeedLines({ progressRef }: { progressRef: ProgressRef }) {
   const groupRef = useRef<THREE.Group>(null!)
-  const { clock } = { clock: sharedClock }
   const lines = useMemo(() => Array.from({ length: 24 }, () => ({
     pos: new THREE.Vector3((Math.random() - 0.5) * 5, (Math.random() - 0.5) * 3, -1.5 - Math.random() * 3),
     len: 0.4 + Math.random() * 1.2,
     spd: 1.5 + Math.random() * 2.5,
   })), [])
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     const p = progressRef.current ?? 0
     const phase = smoothstep(0.38, 0.55, p)
     const fadeOut = 1 - smoothstep(0.53, 0.62, p)
@@ -294,7 +291,7 @@ function SpeedLines({ progressRef }: { progressRef: ProgressRef }) {
       if (!d) return
       const m = child as THREE.Mesh
       m.scale.x = lerp(m.scale.x, phase * d.len, delta * 4)
-      m.position.z = d.pos.z + (clock.elapsedTime * d.spd) % 4
+      m.position.z = d.pos.z + (state.clock.elapsedTime * d.spd) % 4
       const mat = m.material as THREE.MeshStandardMaterial
       mat.opacity = phase * fadeOut * 0.3
     })
@@ -315,7 +312,6 @@ function SpeedLines({ progressRef }: { progressRef: ProgressRef }) {
 /* ─── Orbit Elements (Phase 5 – Payment) ─── */
 function OrbitElements({ progressRef }: { progressRef: ProgressRef }) {
   const groupRef = useRef<THREE.Group>(null!)
-  const { clock } = { clock: sharedClock }
 
   const items = useMemo(() => [
     { radius: 2.2, speed: 0.4, color: '#0D6EFD', size: 0.18 },
@@ -326,7 +322,7 @@ function OrbitElements({ progressRef }: { progressRef: ProgressRef }) {
     { radius: 1.9, speed: -0.45, color: '#f59e0b', size: 0.12 },
   ], [])
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     const p = progressRef.current ?? 0
     const phase = smoothstep(0.78, 0.92, p)
     const g = groupRef.current
@@ -335,7 +331,7 @@ function OrbitElements({ progressRef }: { progressRef: ProgressRef }) {
     g.children.forEach((child, i) => {
       const d = items[i]
       if (!d) return
-      const angle = clock.elapsedTime * d.speed + (i * Math.PI * 2) / items.length
+      const angle = state.clock.elapsedTime * d.speed + (i * Math.PI * 2) / items.length
       const targetX = Math.cos(angle) * d.radius * phase
       const targetY = Math.sin(angle) * d.radius * 0.5 * phase
       child.position.x = lerp(child.position.x, targetX, delta * 4)

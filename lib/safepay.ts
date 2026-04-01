@@ -10,11 +10,10 @@ const IS_SANDBOX = process.env.SAFEPAY_ENV !== 'production'
 
 const BASE_URL = IS_SANDBOX
   ? 'https://sandbox.api.getsafepay.com'
-  : 'https://api.getsafepay.com'
+  : 'https://api.getsafepay.pk'
 
-const CHECKOUT_URL = IS_SANDBOX
-  ? 'https://sandbox.getsafepay.com/checkout'
-  : 'https://getsafepay.com/checkout'
+// Safepay uses a single checkout domain — sandbox vs live is controlled by the env= query param
+const CHECKOUT_URL = 'https://getsafepay.pk/checkout'
 
 interface CreateTrackerOptions {
   orderId: string

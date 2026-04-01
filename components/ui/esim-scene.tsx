@@ -1,7 +1,7 @@
 'use client'
 import { useRef, useMemo, type MutableRefObject } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { RoundedBox, MeshReflectorMaterial } from '@react-three/drei'
+import { RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
 
 /* ─────────────────────────────────────────────
@@ -506,21 +506,15 @@ function Scene({ progressRef }: { progressRef: MutableRefObject<number> }) {
       <SpeedStreaks progressRef={progressRef} />
       <SecurityOrbs progressRef={progressRef} />
       
-      {/* Premium Floor Reflection */}
+      {/* Premium Floor */}
       <mesh position={[0, -2.8, -2]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[50, 50]} />
-        <MeshReflectorMaterial
-          blur={[300, 100]}
-          resolution={512}
-          mixBlur={1}
-          mixStrength={40}
-          roughness={1}
-          depthScale={1.2}
-          minDepthThreshold={0.4}
-          maxDepthThreshold={1.4}
+        <meshStandardMaterial
           color="#070D1E"
-          metalness={0.5}
-          mirror={1}
+          metalness={0.8}
+          roughness={0.15}
+          transparent
+          opacity={0.85}
         />
       </mesh>
 
