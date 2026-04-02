@@ -65,6 +65,7 @@ create table if not exists orders (
   qr_code_url text,
   esim_code text,
   iccid text,
+  delivered_at timestamptz,
   activated_at timestamptz,
   expires_at timestamptz,
   notes text,
