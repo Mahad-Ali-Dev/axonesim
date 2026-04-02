@@ -203,8 +203,17 @@ export default function OrderClient({ order }: { order: OrderWithDetails }) {
                 <p className="text-slate-700 font-semibold text-base mb-2">
                   We received your payment screenshot.
                 </p>
+
+                {/* 6-hour promise banner */}
+                <div className="flex items-center justify-center gap-2 bg-violet-50 border border-violet-200 rounded-xl px-4 py-3 mb-4">
+                  <Mail className="w-4 h-4 text-violet-500 flex-shrink-0" />
+                  <p className="text-sm text-violet-700 font-semibold">
+                    Your eSIM will be delivered to your email within <span className="text-violet-900 font-black">6 hours</span>
+                  </p>
+                </div>
+
                 <p className="text-slate-500 text-sm leading-relaxed mb-5">
-                  Our team is reviewing your payment and will deliver your eSIM to your WhatsApp within <span className="text-violet-600 font-bold">2–5 minutes</span>. Keep WhatsApp open!
+                  Our team will verify your payment and send your eSIM QR code to <span className="text-slate-700 font-semibold">{currentOrder.customers.email}</span>. You'll also receive it on WhatsApp.
                 </p>
                 <a
                   href={`https://wa.me/923349542871?text=Hi! I placed order ${currentOrder.id} for ${currentOrder.plans.name}. Just checking on my eSIM delivery.`}
@@ -225,9 +234,10 @@ export default function OrderClient({ order }: { order: OrderWithDetails }) {
               <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">What happens next</p>
               <div className="space-y-4">
                 {[
-                  { emoji: '🔍', title: 'Payment verified',    desc: 'We check your screenshot — usually under 2 minutes'    },
-                  { emoji: '📲', title: 'eSIM sent via WhatsApp', desc: 'You\'ll receive your QR code on WhatsApp'            },
-                  { emoji: '✅', title: 'Scan & connect',      desc: 'Scan the QR in Settings → Cellular → Add eSIM'        },
+                  { emoji: '🔍', title: 'Payment verified',         desc: 'We review your screenshot — within a few minutes'          },
+                  { emoji: '📧', title: 'eSIM sent to your email',  desc: 'QR code delivered to your inbox within 6 hours'            },
+                  { emoji: '📲', title: 'Also sent via WhatsApp',   desc: 'We\'ll also send it to your WhatsApp number'               },
+                  { emoji: '✅', title: 'Scan & connect',           desc: 'Settings → Cellular → Add eSIM → Scan QR'                  },
                 ].map(({ emoji, title, desc }) => (
                   <div key={title} className="flex items-start gap-3">
                     <div className="text-xl">{emoji}</div>
@@ -249,7 +259,7 @@ export default function OrderClient({ order }: { order: OrderWithDetails }) {
               <Loader2 className="w-7 h-7 text-violet-500 animate-spin" />
             </div>
             <p className="text-slate-800 font-bold mb-1">Preparing your eSIM…</p>
-            <p className="text-xs text-slate-400 mb-4">Payment confirmed! Delivering to your WhatsApp shortly.</p>
+            <p className="text-xs text-slate-400 mb-4">Payment confirmed! Your eSIM will be delivered to your email &amp; WhatsApp within 6 hours.</p>
             <a
               href={`https://wa.me/923349542871?text=Hi! Order ${currentOrder.id} shows processing — when will my eSIM arrive?`}
               target="_blank"
