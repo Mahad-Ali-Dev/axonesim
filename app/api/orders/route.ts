@@ -165,6 +165,7 @@ export async function POST(req: NextRequest) {
       if (screenshotUrl) {
         await supabase.from('payments').update({
           transaction_id: `screenshot:${screenshotUrl}`,
+          status: 'success',
         }).eq('order_id', orderId).eq('gateway', 'manual')
       }
 
