@@ -1,7 +1,10 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2, Send, CheckCircle2, XCircle, RefreshCw, QrCode, ExternalLink, Image as ImageIcon } from 'lucide-react'
+import {
+  Loader2, Send, CheckCircle2, XCircle, RefreshCw,
+  QrCode, ExternalLink, Image as ImageIcon, Upload, X,
+} from 'lucide-react'
 import type { OrderWithDetails } from '@/types/database'
 
 export default function OrderActions({ order }: { order: OrderWithDetails }) {
@@ -15,6 +18,12 @@ export default function OrderActions({ order }: { order: OrderWithDetails }) {
   const [esimCode,  setEsimCode]  = useState((order as any).esim_code   ?? '')
   const [showForm,  setShowForm]  = useState(false)
 
+  // QR image upload
+  const fileInputRef             = useRef<HTMLInputElement>(null)
+  const [qrFile,     setQrFile]  = useState<File | null>(null)
+  const [qrPreview,  setQrPreview] = useState<string>('')
+  const [isDragging, setIsDragging] = useState(false)
+
   // Extract screenshot URL from payment transaction_id
   const screenshotUrl = (() => {
     const payments = (order as any).payments ?? []
@@ -25,6 +34,20 @@ export default function OrderActions({ order }: { order: OrderWithDetails }) {
     }
     return null
   })()
+
+  function handleFileSelect(file: File | null) {
+    if (!file) return
+    setQrFile(file)
+    setQrPreview(URL.createObjectURL(file))
+    // Clear manual URL if image is picked
+    setQrCodeUrl('')
+  }
+
+  function clearQrImage() {
+    setQrFile(null)
+    setQrPreview('')
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
 
   async function action(type: string, extra?: Record<string, string>) {
     setLoading(type)
@@ -41,6 +64,47 @@ export default function OrderActions({ order }: { order: OrderWithDetails }) {
     setLoading(null)
     if (res.ok) router.refresh()
   }
+
+  async function saveEsim() {
+    setLoading('setEsim')
+    setMsg('')
+    setIsError(false)
+
+    let finalQrUrl = qrCodeUrl
+
+    // Upload image first if one was selected
+    if (qrFile) {
+      const form = new FormData()
+      form.append('file', qrFile)
+      form.append('orderId', order.id)
+      const upRes  = await fetch('/api/admin/upload', { method: 'POST', body: form })
+      const upData = await upRes.json()
+      if (!upRes.ok) {
+        setMsg(upData.error || 'Image upload failed')
+        setIsError(true)
+        setLoading(null)
+        return
+      }
+      finalQrUrl = upData.url
+    }
+
+    const res = await fetch(`/api/admin/orders/${order.id}`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ action: 'setEsim', qrCodeUrl: finalQrUrl, esimCode }),
+    })
+    const data = await res.json()
+    setMsg(data.message || data.error || 'Done')
+    setIsError(!res.ok)
+    setLoading(null)
+    if (res.ok) {
+      setQrFile(null)
+      setQrPreview('')
+      router.refresh()
+    }
+  }
+
+  const canSave = !loading && (!!qrFile || !!qrCodeUrl || !!esimCode)
 
   return (
     <div className="space-y-4">
@@ -99,28 +163,96 @@ export default function OrderActions({ order }: { order: OrderWithDetails }) {
 
         {showForm && (
           <div className="space-y-3 pt-1">
+
+            {/* ── QR Image Upload ── */}
             <div>
-              <label className="text-xs text-gray-500 mb-1.5 block">QR Code URL</label>
+              <label className="text-xs text-gray-500 mb-1.5 block">
+                QR Code Image <span className="text-gray-600">(optional)</span>
+              </label>
+
+              {qrPreview ? (
+                /* Preview */
+                <div className="relative rounded-xl overflow-hidden border border-white/10 bg-black">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={qrPreview} alt="QR preview" className="w-full object-contain max-h-48" />
+                  <button
+                    onClick={clearQrImage}
+                    className="absolute top-2 right-2 bg-black/70 hover:bg-black rounded-full p-1 text-gray-400 hover:text-white transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                /* Drop zone */
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={e => { e.preventDefault(); setIsDragging(true) }}
+                  onDragLeave={() => setIsDragging(false)}
+                  onDrop={e => {
+                    e.preventDefault()
+                    setIsDragging(false)
+                    handleFileSelect(e.dataTransfer.files[0] ?? null)
+                  }}
+                  className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed py-6 cursor-pointer transition-colors
+                    ${isDragging
+                      ? 'border-violet-500/60 bg-violet-500/10'
+                      : 'border-white/10 hover:border-violet-500/30 hover:bg-white/5'}`}
+                >
+                  <Upload className="w-5 h-5 text-gray-500" />
+                  <span className="text-xs text-gray-500">Click or drag QR image here</span>
+                  <span className="text-[10px] text-gray-600">PNG, JPG, WEBP</span>
+                </div>
+              )}
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={e => handleFileSelect(e.target.files?.[0] ?? null)}
+              />
+            </div>
+
+            {/* ── OR divider ── */}
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-px bg-white/10" />
+              <span className="text-[10px] text-gray-600">OR enter manually</span>
+              <div className="flex-1 h-px bg-white/10" />
+            </div>
+
+            {/* ── QR Code URL (optional, disabled when image picked) ── */}
+            <div>
+              <label className="text-xs text-gray-500 mb-1.5 block">
+                QR Code URL <span className="text-gray-600">(optional)</span>
+              </label>
               <input
                 value={qrCodeUrl}
                 onChange={e => setQrCodeUrl(e.target.value)}
                 placeholder="https://...qr-image.png"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-violet-500/50 transition-colors"
+                disabled={!!qrFile}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600
+                  focus:outline-none focus:border-violet-500/50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               />
             </div>
+
+            {/* ── Activation Code (optional) ── */}
             <div>
-              <label className="text-xs text-gray-500 mb-1.5 block">Activation Code</label>
+              <label className="text-xs text-gray-500 mb-1.5 block">
+                Activation Code <span className="text-gray-600">(optional)</span>
+              </label>
               <textarea
                 value={esimCode}
                 onChange={e => setEsimCode(e.target.value)}
                 placeholder="LPA:1$..."
                 rows={3}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-violet-500/50 transition-colors font-mono resize-none"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600
+                  focus:outline-none focus:border-violet-500/50 transition-colors font-mono resize-none"
               />
             </div>
+
             <button
-              onClick={() => action('setEsim', { qrCodeUrl, esimCode })}
-              disabled={!!loading || (!qrCodeUrl && !esimCode)}
+              onClick={saveEsim}
+              disabled={!canSave}
               className="w-full flex items-center justify-center gap-2 bg-green-400/10 hover:bg-green-400/20 border border-green-400/20 text-green-400 font-semibold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50"
             >
               {loading === 'setEsim'

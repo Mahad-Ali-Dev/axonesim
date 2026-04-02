@@ -169,15 +169,18 @@ export async function sendESIMDeliveryEmail(data: {
 
       <div style="padding:28px 32px">
 
-        <!-- QR Code -->
+        <!-- QR Code (only when provided) -->
+        ${data.qrCodeUrl ? `
         <div style="text-align:center;margin-bottom:28px">
           <p style="margin:0 0 16px;font-size:13px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Scan this QR code to install your eSIM</p>
-          <div style="display:inline-block;background:#fff;padding:12px;border-radius:16px;border:2px solid #e5e7eb;box-shadow:0 4px 12px rgba(0,0,0,0.08)">
-            <img src="${data.qrCodeUrl}" alt="eSIM QR Code" width="200" height="200" style="display:block;border-radius:8px">
+          <div style="display:inline-block;background:#fff;padding:16px;border-radius:16px;border:2px solid #e5e7eb;box-shadow:0 4px 12px rgba(0,0,0,0.08)">
+            <img src="${data.qrCodeUrl}" alt="eSIM QR Code" width="220" height="220" style="display:block;border-radius:8px">
           </div>
-        </div>
+          <p style="margin:10px 0 0;font-size:11px;color:#9ca3af">If the QR doesn't load, right-click → Open image in new tab</p>
+        </div>` : ''}
 
-        <!-- Activation steps -->
+        <!-- Activation steps (only shown when QR is provided) -->
+        ${data.qrCodeUrl ? `
         <div style="background:#f0fdf4;border-radius:12px;padding:18px 20px;margin-bottom:24px">
           <p style="margin:0 0 12px;font-size:13px;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:0.5px">How to install</p>
           ${['Go to Settings → Cellular / Mobile Data', 'Tap "Add eSIM" or "Add Data Plan"', 'Scan the QR code above', 'Follow prompts to activate'].map((s, i) => `
@@ -185,13 +188,14 @@ export async function sendESIMDeliveryEmail(data: {
             <span style="background:#059669;color:#fff;font-weight:700;font-size:11px;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-align:center;line-height:20px">${i+1}</span>
             <p style="margin:0;font-size:13px;color:#1f2937;line-height:1.4">${s}</p>
           </div>`).join('')}
-        </div>
+        </div>` : ''}
 
-        <!-- Activation code -->
+        <!-- Manual Activation Code (only when provided) -->
+        ${data.esimCode ? `
         <div style="background:#1e1b4b;border-radius:12px;padding:18px 20px;margin-bottom:24px">
           <p style="margin:0 0 8px;font-size:11px;color:#a5b4fc;text-transform:uppercase;letter-spacing:1px;font-weight:600">Manual Activation Code</p>
-          <code style="color:#34d399;font-size:12px;word-break:break-all;line-height:1.6">${data.esimCode}</code>
-        </div>
+          <code style="color:#34d399;font-size:13px;word-break:break-all;line-height:1.6">${data.esimCode}</code>
+        </div>` : ''}
 
         <!-- Plan info -->
         <table style="width:100%;border-collapse:collapse;margin-bottom:24px">
