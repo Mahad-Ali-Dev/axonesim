@@ -33,8 +33,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       // ── Manual eSIM entry by admin ──────────────────────────────────────────
       case 'setEsim': {
         const { qrCodeUrl, esimCode } = body
+        // Both fields are optional — at least one must be present
         if (!qrCodeUrl && !esimCode) {
-          return NextResponse.json({ error: 'Provide QR URL or activation code' }, { status: 400 })
+          return NextResponse.json({ error: 'Provide at least a QR image/URL or an activation code' }, { status: 400 })
         }
 
         // Save to order
