@@ -56,8 +56,8 @@ create type payment_method as enum (
 
 create table if not exists orders (
   id text primary key,  -- e.g. AXN-ABC123-XY99
-  customer_id uuid not null references customers(id),
-  plan_id uuid not null references plans(id),
+  customer_id uuid not null references customers(id) on delete cascade,
+  plan_id uuid not null references plans(id) on delete cascade,
   status order_status default 'pending',
   payment_method payment_method not null,
   amount_paid numeric not null,
