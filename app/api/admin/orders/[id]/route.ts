@@ -38,13 +38,24 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
           return NextResponse.json({ error: 'Provide at least a QR image/URL or an activation code' }, { status: 400 })
         }
 
-        // Save to order
-        await (supabase.from('orders') as any).update({
-          qr_code_url: qrCodeUrl  || null,
-          esim_code:   esimCode   || null,
-          status:      'delivered',
+        // Update order → delivered
+        const { error: orderErr } = await (supabase.from('orders') as any).update({
+          qr_code_url:  qrCodeUrl  || null,
+          esim_code:    esimCode   || null,
+          status:       'delivered',
           delivered_at: new Date().toISOString(),
         }).eq('id', id)
+
+        if (orderErr) {
+          console.error('setEsim order update error:', orderErr)
+          return NextResponse.json({ error: 'Failed to update order: ' + orderErr.message }, { status: 500 })
+        }
+
+        // Also mark any pending payment as success (admin has verified payment by delivering)
+        await (supabase.from('payments') as any)
+          .update({ status: 'success' })
+          .eq('order_id', id)
+          .eq('status', 'pending')
 
         // Fetch order + customer + plan for email
         const { data: orderRow } = await (supabase.from('orders') as any)
@@ -57,11 +68,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
             customerName:  orderRow.customers.name,
             customerEmail: orderRow.customers.email,
             orderId:       id,
-            planName:      orderRow.plans?.name         ?? 'eSIM Plan',
-            dataGb:        orderRow.plans?.data_gb      ?? 0,
+            planName:      orderRow.plans?.name          ?? 'eSIM Plan',
+            dataGb:        orderRow.plans?.data_gb       ?? 0,
             validityDays:  orderRow.plans?.validity_days ?? 0,
-            qrCodeUrl:     qrCodeUrl  || '',
-            esimCode:      esimCode   || '',
+            qrCodeUrl:     qrCodeUrl || '',
+            esimCode:      esimCode  || '',
           }).catch(e => console.error('Delivery email error:', e))
         }
 
