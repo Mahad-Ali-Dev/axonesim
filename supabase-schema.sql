@@ -84,7 +84,7 @@ create type payment_status as enum (
 
 create table if not exists payments (
   id uuid primary key default uuid_generate_v4(),
-  order_id text not null references orders(id),
+  order_id text not null references orders(id) on delete cascade,
   gateway payment_method not null,
   transaction_id text,
   amount numeric not null,
